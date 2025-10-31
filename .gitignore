@@ -1,0 +1,7 @@
+.pixi
+*.egg-info
+pixi.lock
+.gitattributes
+*.pyc
+main_dev.py
+*.coverage

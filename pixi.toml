@@ -1,0 +1,35 @@
+[workspace]
+authors = ["bwernest"]
+channels = ["conda-forge"]
+name = "quiz_template"
+platforms = ["win-64"]
+version = "0.1.0"
+
+[dependencies]
+
+# Python
+python = "3.13.*"
+numpy = "*"
+openpyxl = "*"
+pandas = "*"
+
+# Développement
+autopep8 = "*"
+coverage = "*"
+pytest = "*"
+
+[tasks]
+
+# Mono
+main = "python main.py"
+config = "python config.py"
+cover_get = "coverage run -m pytest engine"
+cover_show = "coverage html"
+format = "autopep8 --in-place --recursive ./"
+go = "python main_dev.py"
+test = "pytest engine"
+print_test = "pytest -s engine"
+
+# Multi
+coverage = {depends-on = ["cover_get", "cover_show"]}
+validate = {depends-on = ["format", "test", "main"]}

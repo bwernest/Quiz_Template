@@ -1,0 +1,25 @@
+{
+    "prod": {
+        "test": false,
+
+        "paths": {
+
+            "data": "engine/data/data.xlsx",
+            "save": "engine/data/save.bw",
+            "logo": "engine/data/logo.png"
+
+        }
+    },
+
+    "test": {
+        "test": true,
+
+        "paths": {
+
+            "data": "engine/test/data/data.xlsx",
+            "save": "engine/test/data/save.bw",
+            "logo": "engine/data/logo.png"
+
+        }
+    }
+}

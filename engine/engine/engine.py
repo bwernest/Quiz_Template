@@ -50,7 +50,7 @@ class Engine(Fenetre):
             save += f"{element}:{self.scores[element]}:{self.attempts[element]}\n"
         self.write_txt(self.paths["save"], save[:-1], extension="")
 
-    def get_questions(self, duree: int) -> list:
+    def get_questions(self, duree: int) -> tuple[list, list]:
         lenE = len(self.elements)
         if len(self.elements) <= duree:
             return self.elements
@@ -76,16 +76,27 @@ class Engine(Fenetre):
             ponderated_indexes.pop(index)
             lenP-=1
             questions.append(self.elements[indexes[-1]])
+            self.attempts[questions[-1]] += 1
 
-        return questions
+        # Réponses
+        answers = []
+        for element in questions:
+            answers.append(self.data[element])
+
+        return questions, answers
 
     def quizz(self, duree: int = 3) -> None:
         self.init_fenetre()
-        self.init_quiz(self.get_questions(duree))
+        questions, answers = self.get_questions(duree)
+        self.init_quiz(questions, answers)
 
         self.questionner()
         self.start_fenetre()
 
-        print(self.get_results())
+        results = self.get_results()
+        for r, result in enumerate(results):
+            if result:
+                element = questions[r]
+                self.scores[element] += 1
 
         self.erase_save()

@@ -1,6 +1,6 @@
 """___Modules_______________________________________________________________"""
 
-# Osigle
+# Quiz
 from .settings import Settings
 
 # Python

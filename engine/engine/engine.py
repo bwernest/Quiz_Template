@@ -1,6 +1,6 @@
 """___Modules_______________________________________________________________"""
 
-# Osigle
+# Quiz
 from ..utils import *
 from .interface import Fenetre
 
@@ -27,13 +27,24 @@ class Engine(Fenetre):
 
         # No save
         if self.save == []:
-            return
+            pass
+        
+        # Save exists
+        else:
+            for element, score, attempt in self.save:
+                self.scores[element] = score
+                self.attempts[element] = attempt
+        
+        self.fix_save()
+    
+    def fix_save(self) -> None:
+        save_elements = [element for element, _, _ in self.save]
+        for element in self.elements:
+            if element not in save_elements:
+                self.scores[element] = 0
+                self.attempts[element] = 0
 
-        for element, score, attempt in self.save:
-            self.scores[element] = score
-            self.attempts[element] = attempt
-
-    def save(self) -> None:
+    def erase_save(self) -> None:
         save = ""
         for element in self.elements:
             save += f"{element}:{self.scores[element]}:{self.attempts[element]}\n"

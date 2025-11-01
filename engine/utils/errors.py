@@ -1,9 +1,9 @@
 """___Classes_______________________________________________________________"""
 
 
-class OsigleException(Exception):
+class QuizException(Exception):
     pass
 
 
-class SettingsNotAvailable(OsigleException):
+class SettingsNotAvailable(QuizException):
     pass

@@ -48,7 +48,7 @@ class Engine(Fenetre):
         save = ""
         for element in self.elements:
             save += f"{element}:{self.scores[element]}:{self.attempts[element]}\n"
-        self.write_txt(self.paths["save"], save[:-1], extension="bw")
+        self.write_txt(self.paths["save"], save[:-1], extension="")
 
     def get_questions(self, duree: int) -> list:
         lenE = len(self.elements)
@@ -56,12 +56,26 @@ class Engine(Fenetre):
             return self.elements
         indexes = []
         questions = []
+
+        # Liste pondérée des indices
+        ponderated_indexes = []
+        for index in range(lenE):
+            score = self.scores[self.elements[index]]
+            attempt = self.attempts[self.elements[index]]
+            ponderated_indexes.extend([index]*int(attempt-score+1))
+        lenP = len(ponderated_indexes)
+
+        # Tirage des questions
         for _ in range(duree):
-            index = np.random.randint(0, lenE)
-            while index in indexes:
-                index = np.random.randint(0, lenE)
-            indexes.append(index)
-            questions.append(self.elements[index])
+            index = np.random.randint(0, lenP)
+            while ponderated_indexes[index] in indexes:
+                lenP -= 1
+                ponderated_indexes.pop(index)
+                index = np.random.randint(0, lenP)
+            indexes.append(ponderated_indexes[index])
+            ponderated_indexes.pop(index)
+            lenP-=1
+            questions.append(self.elements[indexes[-1]])
 
         return questions
 
@@ -73,3 +87,5 @@ class Engine(Fenetre):
         self.start_fenetre()
 
         print(self.get_results())
+
+        self.erase_save()

@@ -19,10 +19,12 @@ class ToolBox(Settings):
             method = "a"
         else:
             method = "w"
+        if extension != "":
+            extension = "." + extension
         if "/" in path:
             SplitPath = path.split("/")
             os.makedirs("/".join(SplitPath[:-1]), exist_ok=True)
-        txt = open(f"{path}.{extension}", method, encoding="utf-8")
+        txt = open(f"{path}{extension}", method, encoding="utf-8")
         txt.write(text)
         txt.close()
 

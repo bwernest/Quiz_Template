@@ -1,12 +1,12 @@
 """___Modules_______________________________________________________________"""
 
-# Quiz
+# bwizz
+from .errors import *
 from .settings import Settings
 
 # Python
-import os
 import datetime
-import pandas as pd
+import os
 from typing import Dict, List
 
 """___Functions_____________________________________________________________"""
@@ -99,21 +99,3 @@ class ToolBox(Settings):
                     self.clean_folder(f"{path}/{file}", subcall=True)
             if subcall:
                 os.rmdir(path)
-
-    def import_data_file(self) -> dict:
-        raw_data = pd.read_excel(self.paths["data"]).to_dict()
-        sigles = []
-        data = {}
-        for sigle in raw_data["Question"].values():
-            sigles.append(sigle)
-        for key, signification in raw_data["Réponse"].items():
-            data[sigles[key]] = str(signification)
-        return data
-
-    def import_save_file(self) -> dict:
-        raw_save = self.read_txt(self.paths["save"]).split("\n")
-        for l, line in enumerate(raw_save):
-            raw_save[l] = line.split(":")
-            raw_save[l][1] = eval(raw_save[l][1])
-            raw_save[l][2] = eval(raw_save[l][2])
-        return raw_save

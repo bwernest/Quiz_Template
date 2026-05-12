@@ -1,7 +1,7 @@
-.pixi
 *.egg-info
-pixi.lock
 .gitattributes
 *.pyc
-main_dev.py
 *.coverage
+# pixi environments
+.pixi/*
+!.pixi/config.toml

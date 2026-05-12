@@ -1,13 +1,18 @@
 """___Notes_________________________________________________________________"""
 """
-blablabla
+- Glossaire
+- Etat de la sauvegarde
+- Ésthetique
 """
 """___Modules_______________________________________________________________"""
 
-# Projet
+# bwizz
+from engine.engine.engine import Engine
 
 """___Execution_____________________________________________________________"""
 
-from engine.engine.engine import Engine
 engine = Engine("prod")
-engine.quizz()
+engine.start()
+
+# engine.print_info("data", engine.data, option="liste")
+# engine.reset_save()

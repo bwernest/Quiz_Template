@@ -7,3 +7,11 @@ class QuizException(Exception):
 
 class SettingsNotAvailable(QuizException):
     pass
+
+
+class QuizDataUnreadable(QuizException):
+    pass
+
+
+class QuizSaveUnreadable(QuizException):
+    pass

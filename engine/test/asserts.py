@@ -9,8 +9,8 @@ class Assert():
             error_msg += f"argument {a + 1} :\n{arg}\n"
         return error_msg
 
-    def assertEqual(self, a, b) -> None:
-        assert a == b, self.AnalyseError(a, b)
+    def assertEqual(self, a, b, msg="") -> None:
+        assert a == b, self.AnalyseError(a, b, msg)
 
     def assertNotEqual(self, a, b) -> None:
         assert a != b, self.AnalyseError(a, b)

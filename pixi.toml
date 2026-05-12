@@ -1,7 +1,7 @@
 [workspace]
-authors = ["bwernest"]
+authors = ["bwernest <ernest.laprelleboucher@gmail.com>"]
 channels = ["conda-forge"]
-name = "quiz_template"
+name = "Quiz_Template"
 platforms = ["win-64"]
 version = "0.1.0"
 

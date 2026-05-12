@@ -4,9 +4,7 @@
 import os
 import sys
 
-# sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
-
-# Project
+# bwizz
 from .asserts import Assert
 from ..engine.engine import Engine
 
@@ -17,7 +15,6 @@ class TestEngine(Assert):
 
     def test_import(self) -> None:
         engine = Engine("test")
-        engine.start()
         engine.import_data()
         result = engine.data
         self.assertIsInstance(result, dict)

@@ -152,13 +152,13 @@ class FenetreBuilder(QuizToolBox):
         text += "\n\nBonnes Réponses ✔ :\n"
         for r, result in enumerate(self.quiz_results):
             if result:
-                text += f"{self.questions[r]} : {self.guesses[r]}\n"
+                text += f"{self.questions[r]["question"]} : {self.guesses[r]}\n"
 
         text += "\n"
         text += "Mauvaises Réponses ✘ :\n"
         for r, result in enumerate(self.quiz_results):
             if not result:
-                text += f"{self.questions[r]} : {self.answers[r]}\n"
+                text += f"{self.questions[r]["question"]} : {self.questions[r]["reponse"]}\n"
 
         conclusion_label.config(text=text)
         conclusion_label.pack()

@@ -22,13 +22,15 @@ class QuizToolBox(ToolBox):
 
     def import_data_file(self) -> Dict[str, Dict[str, str]]:
         try:
-            raw_data: Dict[str, Dict[str, str]] = json.load(
-                open(self.paths["file_data"], encoding="utf-8"))
+            raw_data: Dict[str, Dict[str, str | List]] = json.load(open(self.paths["file_data"], encoding="utf-8"))
             data = {}
-            for chapter in raw_data.keys():
+            for chapter, thing in raw_data.items():
                 data[chapter] = {}
-                for sigle, meaning in raw_data[chapter].items():
-                    data[chapter][sigle] = meaning
+                for key, value in thing.items():
+                    if key == "data":
+                        data[chapter]["questions"] = value
+                    else:
+                        data[chapter][key] = value
             return data
         except QuizDataUnreadable:
             raise QuizDataUnreadable()

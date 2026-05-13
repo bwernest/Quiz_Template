@@ -7,7 +7,7 @@ from ..utils.fenetre_setup import FenetreSetup
 # Python
 import tkinter as tk
 from tkinter import ttk
-from typing import Tuple
+from typing import Dict, List, Literal, Tuple
 
 """___Classes_______________________________________________________________"""
 
@@ -15,14 +15,16 @@ from typing import Tuple
 class Fenetre(FenetreSetup):
 
     exists: bool = False
+    question: Dict[Literal["type", "question", "reponse"], str]
+    questions: List[Dict[Literal["type", "question", "reponse"], str]]
 
     def setup_fenetre(self, config: str, **kwargs) -> None:
         configs = {
             "home": self.setup_fenetre_home,
             "quiz": self.setup_fenetre_quiz,
-            "conclusion": self.setup_fenetre_conclusion,
             "chapter": self.setup_fenetre_chapter,
             "parameter": self.setup_fenetre_parameter,
+            "conclusion": self.setup_fenetre_conclusion,
         }
 
         if not self.exists:
@@ -47,13 +49,6 @@ class Fenetre(FenetreSetup):
         self.current_frame.configure(bg=self.color_BG_menu)
         self.current_frame.pack(fill="both", expand=True)
         configs[config](normal_mode_button=self.play_quiz, **kwargs)
-
-    def init_quiz(self, questions: list, answers: list) -> None:
-        self.questions = questions
-        self.answers = answers
-        self.guesses = []
-        self.quiz_results = []
-        self.reset_question_index()
 
     def reset_question_index(self) -> None:
         self.question_index = -1

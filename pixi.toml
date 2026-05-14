@@ -9,6 +9,7 @@ version = "0.1.0"
 
 # Python
 python = "3.13.*"
+nicegui = "*"
 numpy = "*"
 openpyxl = "*"
 pandas = "*"

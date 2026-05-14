@@ -5,9 +5,10 @@ from .save import Save
 from ..utils import *
 
 # Python
+from nicegui import ui
 import numpy as np
 from random import shuffle
-from tkinter import BooleanVar
+from time import sleep
 from typing import Dict, List, Literal, Tuple
 
 """___Classes_______________________________________________________________"""
@@ -18,7 +19,7 @@ class Engine(Save):
     def start(self) -> None:
         self.init_chapters()
         self.import_data()
-        self.setup_fenetre("home")
+        self.setup_fenetre("home", normal_mode_button=self.play_quiz, competitive_mode_button=self.play_quiz_competitive)
         self.start_fenetre()
 
     def import_data(self) -> None:
@@ -34,7 +35,7 @@ class Engine(Save):
         # Récupération des questions parmi les chapitres actifs
         questions = []
         for chapter, check in self.chapters.items():
-            if check.get():
+            if check:
                 for question in self.data[chapter]["questions"]:
                     questions.append(question)
         shuffle(questions)
@@ -62,7 +63,7 @@ class Engine(Save):
         self.current_frame.configure(bg=self.color_BG_competitive)
 
     def questionner(self) -> None:
-        self.reset_question_result_label("")
+        self.set_question_result_label("")
         index = self.get_question_index
         if index < len(self.questions):
             self.question = self.questions[index]
@@ -94,27 +95,29 @@ class Engine(Save):
         self.give_question(self.question["question"])
         
     def give_question(self, question_text) -> None:
-        self.reset_question_label(question_text)
-        self.reset_guess_entry()
+        self.set_question_label(question_text)
+        self.set_guess_entry()
 
         # Prevent spam
-        self.reset_validation_button(self.valider)
-        self.main_fenetre.bind("<Return>", self.valider)
+        self.set_validation_button(self.valider)
+        self.guess_entry.on("keydown.enter", self.valider)
 
     def valider(self, event=None) -> None:
 
         # Prevent spam
-        self.reset_validation_button()
-        self.main_fenetre.unbind("<Return>")
+        self.set_validation_button()
+        self.guess_entry.on("keydown.enter", lambda: None)
         {
             "Q": self.corriger_Q,
             "I": self.corriger_I,
             "S": self.corriger_S,
             "L": self.corriger_L,
         }[self.question["type"]]()  # type: ignore
+        
+        self.guess_entry.set_value('')  # Vider le champ de saisie
 
     def corriger_Q(self) -> None:
-        guess = self.guess_entry.get()
+        guess = self.guess_entry.value.strip().lower()
         self.guesses.append(guess)
         answer = self.questions[self.question_index]["reponse"]
         correct_answer = self.answer_is_correct(guess, answer)  # type: ignore
@@ -124,7 +127,7 @@ class Engine(Save):
         pass
 
     def corriger_S(self) -> None:
-        guess = self.guess_entry.get()
+        guess = self.guess_entry.value.strip().lower()
         self.guesses.append(guess)
         for answer in self.answers:
             correct_answer = self.answer_is_correct(guess, answer)  # type: ignore
@@ -134,7 +137,7 @@ class Engine(Save):
         self.deal_with_correction(correct_answer, answer)       # type: ignore
 
     def corriger_L(self) -> None:
-        guess = self.guess_entry.get()
+        guess = self.guess_entry.value.strip().lower()
         self.guesses.append(guess)
         answer = self.question["reponse"][self.questions_list_index]
         correct_answer = self.answer_is_correct(guess, answer)  # type: ignore
@@ -144,16 +147,17 @@ class Engine(Save):
 
         # Bonne réponse
         if correct_answer:
-            self.reset_question_result_label("Correct ✔")
+            self.set_question_result_label("Correct ✔")
             shift = 500
             self.quiz_results.append(True)
 
         # Mauvaise réponse
         else:
-            self.reset_question_result_label(f"Non ✘\n{answer}")
+            self.set_question_result_label(f"Non ✘\n{answer}")
             shift = 2000
             self.quiz_results.append(False)
-        self.current_frame.after(shift, self.questionner)
+        sleep(shift)
+        self.questionner()
 
     def end_quiz(self) -> None:
 

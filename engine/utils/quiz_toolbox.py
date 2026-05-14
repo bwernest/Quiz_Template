@@ -7,7 +7,6 @@ from .toolbox import ToolBox
 # Python
 import json
 from time import perf_counter as clock
-from tkinter import BooleanVar
 from typing import Dict, List, Tuple
 
 """___Functions_____________________________________________________________"""
@@ -15,7 +14,7 @@ from typing import Dict, List, Tuple
 
 class QuizToolBox(ToolBox):
 
-    chapters: Dict[str, BooleanVar]
+    chapters: Dict[str, bool]
 
     def init_chapters(self) -> None:
         self.chapters = {}

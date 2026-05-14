@@ -6,7 +6,6 @@ from .fenetre import Fenetre
 
 # Python
 import numpy as np
-from tkinter import BooleanVar
 from typing import Dict, List, Tuple
 
 """___Classes_______________________________________________________________"""

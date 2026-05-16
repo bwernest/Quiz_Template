@@ -7,7 +7,7 @@ from .toolbox import ToolBox
 # Python
 import json
 from time import perf_counter as clock
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple
 
 """___Functions_____________________________________________________________"""
 
@@ -34,7 +34,9 @@ class QuizToolBox(ToolBox):
         except QuizDataUnreadable:
             raise QuizDataUnreadable()
 
-    def normalize_string(self, string: str) -> str:
+    def normalize_string(self, string: Optional[str]) -> str:
+        if not string:
+            return ""
         conversion = {"à": "a", "â": "a",
                       "é": "e", "è": "e", "ê": "e",
                       "î": "i",
@@ -62,7 +64,7 @@ class QuizToolBox(ToolBox):
         except QuizSaveUnreadable:
             raise QuizSaveUnreadable()
 
-    def answer_is_correct(self, guess: str, answer: str) -> bool:
+    def answer_is_correct(self, guess: Optional[str], answer: str) -> bool:
         return self.normalize_string(guess) == self.normalize_string(answer)
 
     def start_timer(self) -> None:

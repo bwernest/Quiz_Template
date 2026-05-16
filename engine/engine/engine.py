@@ -1,26 +1,34 @@
-"""___Modules_______________________________________________________________"""
+"""___Modules___________________________________________________________________________________"""
 
 # bwizz
 from .save import Save
 from ..utils import *
 
 # Python
-from nicegui import ui
 import numpy as np
 from random import shuffle
 from time import sleep
-from typing import Dict, List, Literal, Tuple
+from typing import Dict, List, Literal, Optional, Tuple
 
-"""___Classes_______________________________________________________________"""
+"""___Classes___________________________________________________________________________________"""
 
 
 class Engine(Save):
 
+    question_index: int
+    active_question: str
+    result_label: str
+
+    @property
+    def result_labels(self) -> Dict[bool, str]:
+        return {
+            True: "Correct ✔",
+            False: "Non ✘"
+        }
+
     def start(self) -> None:
         self.init_chapters()
         self.import_data()
-        self.setup_fenetre("home", normal_mode_button=self.play_quiz, competitive_mode_button=self.play_quiz_competitive)
-        self.start_fenetre()
 
     def import_data(self) -> None:
         self.data = self.import_data_file()
@@ -45,28 +53,23 @@ class Engine(Save):
         self.questions = questions
         self.guesses = []
         self.quiz_results = []
-        self.reset_question_index()
 
-    def play_quiz(self, competitive: bool = False) -> None:
+    def setup_quiz(self, competitive: bool = False) -> None:
         competitive = False if competitive is not bool else competitive
         duree = self.competitive_mode_length if competitive else self.normal_mode_length
-        bg_color = "red" if competitive else "blue"
+        self.question_index = 0
 
-        self.setup_fenetre("quiz", bg_color=bg_color)
         questions = self.get_questions(duree, competitive)
         self.init_quiz(questions)
         self.start_timer()
-        self.questionner()
 
     def play_quiz_competitive(self) -> None:
-        self.play_quiz(competitive=True)
-        self.current_frame.configure(bg=self.color_BG_competitive)
+        self.setup_quiz(competitive=True)
 
     def questionner(self) -> None:
-        self.set_question_result_label("")
-        index = self.get_question_index
-        if index < len(self.questions):
-            self.question = self.questions[index]
+        if self.question_index < len(self.questions):
+            self.question = self.questions[self.question_index]
+            self.active_question = self.question["question"]
             {
                 "Q": self.questionner_Q,
                 "I": self.questionner_I,
@@ -95,69 +98,52 @@ class Engine(Save):
         self.give_question(self.question["question"])
         
     def give_question(self, question_text) -> None:
-        self.set_question_label(question_text)
-        self.set_guess_entry()
+        self.active_question = question_text
 
-        # Prevent spam
-        self.set_validation_button(self.valider)
-        self.guess_entry.on("keydown.enter", self.valider)
-
-    def valider(self, event=None) -> None:
-
-        # Prevent spam
-        self.set_validation_button()
-        self.guess_entry.on("keydown.enter", lambda: None)
+    def valider(self, guess: Optional[str]) -> None:
         {
             "Q": self.corriger_Q,
             "I": self.corriger_I,
             "S": self.corriger_S,
             "L": self.corriger_L,
-        }[self.question["type"]]()  # type: ignore
+        }[self.question["type"]](guess)
         
-        self.guess_entry.set_value('')  # Vider le champ de saisie
-
-    def corriger_Q(self) -> None:
-        guess = self.guess_entry.value.strip().lower()
+    def corriger_Q(self, guess: Optional[str]) -> None:
         self.guesses.append(guess)
         answer = self.questions[self.question_index]["reponse"]
-        correct_answer = self.answer_is_correct(guess, answer)  # type: ignore
-        self.deal_with_correction(correct_answer, answer)       # type: ignore
+        correct_answer = self.answer_is_correct(guess, answer)
+        self.deal_with_correction(correct_answer)
 
-    def corriger_I(self) -> None:
+    def corriger_I(self, guess: Optional[str]) -> None:
         pass
 
-    def corriger_S(self) -> None:
-        guess = self.guess_entry.value.strip().lower()
+    def corriger_S(self, guess: Optional[str]) -> None:
         self.guesses.append(guess)
         for answer in self.answers:
-            correct_answer = self.answer_is_correct(guess, answer)  # type: ignore
+            correct_answer = self.answer_is_correct(guess, answer)
             if correct_answer:
                 self.given_answers.append(answer)
                 break
-        self.deal_with_correction(correct_answer, answer)       # type: ignore
+        self.deal_with_correction(correct_answer)
 
-    def corriger_L(self) -> None:
-        guess = self.guess_entry.value.strip().lower()
+    def corriger_L(self, guess: Optional[str]) -> None:
         self.guesses.append(guess)
         answer = self.question["reponse"][self.questions_list_index]
-        correct_answer = self.answer_is_correct(guess, answer)  # type: ignore
-        self.deal_with_correction(correct_answer, answer)       # type: ignore
+        correct_answer = self.answer_is_correct(guess, answer)
+        self.deal_with_correction(correct_answer)
 
-    def deal_with_correction(self, correct_answer: bool, answer: str) -> None:
+    def deal_with_correction(self, answer_is_correct: bool) -> None:
 
         # Bonne réponse
-        if correct_answer:
-            self.set_question_result_label("Correct ✔")
-            shift = 500
+        if answer_is_correct:
+            self.result_label = self.result_labels[True]
             self.quiz_results.append(True)
 
         # Mauvaise réponse
         else:
-            self.set_question_result_label(f"Non ✘\n{answer}")
-            shift = 2000
+            self.result_label = self.result_labels[False]
             self.quiz_results.append(False)
-        sleep(shift)
-        self.questionner()
+        self.question_index += 1
 
     def end_quiz(self) -> None:
 
@@ -168,4 +154,3 @@ class Engine(Save):
         #         self.scores[element] += 1
 
         # self.erase_save()
-        self.setup_fenetre("conclusion")

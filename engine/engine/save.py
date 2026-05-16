@@ -1,8 +1,7 @@
 """___Modules_______________________________________________________________"""
 
 # bwizz
-from ..utils import *
-from .fenetre import Fenetre
+from ..utils.quiz_toolbox import QuizToolBox
 
 # Python
 import numpy as np
@@ -11,7 +10,7 @@ from typing import Dict, List, Tuple
 """___Classes_______________________________________________________________"""
 
 
-class Save(Fenetre):
+class Save(QuizToolBox):
 
     def import_save(self) -> None:
         self.save = self.import_save_file()

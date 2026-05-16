@@ -1,18 +1,10 @@
-"""___Notes_________________________________________________________________"""
+"""___Notes_____________________________________________________________________________________"""
 """
 - Glossaire
 - Etat de la sauvegarde
 - Ésthetique
 """
-"""___Modules_______________________________________________________________"""
+"""___Modules___________________________________________________________________________________"""
 
 # bwizz
-from engine.engine.engine import Engine
-
-"""___Execution_____________________________________________________________"""
-
-engine = Engine("prod")
-engine.start()
-
-# engine.print_info("data", engine.data, option="liste")
-# engine.reset_save()
+from engine.engine import api

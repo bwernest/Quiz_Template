@@ -9,17 +9,18 @@ from nicegui import app, ui
 """___Functions_________________________________________________________________________________"""
 
 def create(engine: Engine) -> None:
+    engine.add_log("Création de home page")
     # Logo
-    ui.label("Quiz Game")
-    ui.image(engine.paths["file_logo_blue"])
+    ui.label("Quiz Game").classes("text-center")
+    ui.image(engine.paths["file_logo_blue"]).classes("text-center")
     # Normal
-    ui.button("Partie Classique", on_click=lambda: go_play(engine))
+    ui.button("Partie Classique", on_click=lambda: go_play(engine)).classes("text-center")
     # Compétitif
-    ui.button("Partie Compétitive", on_click=lambda: go_play_competitive(engine))
+    ui.button("Partie Compétitive", on_click=lambda: go_play_competitive(engine)).classes("text-center")
     # Bouton paramètres
-    ui.button("Paramètres", on_click=lambda: ui.navigate.to("/parameter"))
+    ui.button("Paramètres", on_click=lambda: ui.navigate.to("/parameter")).classes("text-center")
     # Bouton Quitter
-    ui.button("Quitter", on_click=app.shutdown)
+    ui.button("Quitter", on_click=app.shutdown).classes("text-center")
     app.on_shutdown(lambda: print("Fermeture de l'application..."))
 
 def go_play(engine: Engine) -> None:

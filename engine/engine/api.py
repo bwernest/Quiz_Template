@@ -1,7 +1,7 @@
 """___Modules___________________________________________________________________________________"""
 
 # bwizz
-from .pages import home, parameter, play
+from .pages import home, parameter, play, conclusion
 from .engine import Engine
 
 # Python
@@ -20,8 +20,8 @@ def home_page():
 def play_page():
     play.create(engine)
 
-@ui.page("/parameter")
-def parameter_page():
-    parameter.create(engine)
+@ui.page("/conclusion")
+def conclusion_page():
+    conclusion.create(engine)
 
 ui.run(title="bwizz", dark=True)

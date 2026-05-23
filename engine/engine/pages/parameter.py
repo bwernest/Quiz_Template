@@ -9,6 +9,7 @@ from nicegui import app, ui
 """___Functions_________________________________________________________________________________"""
 
 def create(engine: Engine) -> None:
+    engine.add_log("Création de parameter page")
     # Logo
     ui.image(engine.paths["file_logo_blue"])
     # Font size

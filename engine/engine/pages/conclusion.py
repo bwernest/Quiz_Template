@@ -12,13 +12,13 @@ def create(engine: Engine) -> None:
     # Logo
     ui.image(engine.paths["file_logo_blue"])
     # Conclusion
-    engine.set_conclusion_label()
+    ui.label("Merci d'avoir joué !").classes("text-center")
     # Score
-    engine.set_score_label()
+    ui.label(f"Votre score : {engine.score} / {engine.quiz_length}").classes("text-center")
     # Chrono
-    engine.set_timer_label()
+    ui.label(f"Temps : {engine.quiz_time}").classes("text-center")
     # Home
-    engine.set_home_button()
+    ui.button("Accueil", on_click=lambda: ui.navigate.to("/home")).classes("text-center")
     # Binds
-    ui.on("keydown.m", lambda: ui.navigate.to("/home"))
+    ui.on("keydown.m", lambda: ui.navigate.to("/"))
     ui.on("keydown.r", engine.setup_quiz)

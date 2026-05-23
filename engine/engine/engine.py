@@ -7,7 +7,6 @@ from ..utils import *
 # Python
 import numpy as np
 from random import shuffle
-from time import sleep
 from typing import Dict, List, Literal, Optional, Tuple
 
 """___Classes___________________________________________________________________________________"""
@@ -18,6 +17,9 @@ class Engine(Save):
     question_index: int
     active_question: str
     result_label: str
+
+    time_after_good_answer: int = 1
+    time_after_bad_answer: int = 2
 
     @property
     def result_labels(self) -> Dict[bool, str]:
@@ -58,6 +60,7 @@ class Engine(Save):
         competitive = False if competitive is not bool else competitive
         duree = self.competitive_mode_length if competitive else self.normal_mode_length
         self.question_index = 0
+        self.quiz_length = duree
 
         questions = self.get_questions(duree, competitive)
         self.init_quiz(questions)
@@ -67,17 +70,14 @@ class Engine(Save):
         self.setup_quiz(competitive=True)
 
     def questionner(self) -> None:
-        if self.question_index < len(self.questions):
-            self.question = self.questions[self.question_index]
-            self.active_question = self.question["question"]
-            {
-                "Q": self.questionner_Q,
-                "I": self.questionner_I,
-                "S": self.questionner_S,
-                "L": self.questionner_L,
-            }[self.question["type"]]()
-        else:
-            self.end_quiz()
+        self.question = self.questions[self.question_index]
+        self.active_question = self.question["question"]
+        {
+            "Q": self.questionner_Q,
+            "I": self.questionner_I,
+            "S": self.questionner_S,
+            "L": self.questionner_L,
+        }[self.question["type"]]()
 
     def questionner_Q(self) -> None:
         self.give_question(self.question["question"])
@@ -138,19 +138,16 @@ class Engine(Save):
         if answer_is_correct:
             self.result_label = self.result_labels[True]
             self.quiz_results.append(True)
+            self.time_after_answer = self.time_after_good_answer
 
         # Mauvaise réponse
         else:
             self.result_label = self.result_labels[False]
             self.quiz_results.append(False)
+            self.time_after_answer = self.time_after_bad_answer
         self.question_index += 1
 
     def end_quiz(self) -> None:
 
         self.end_timer()
-        # for r, result in enumerate(self.quiz_results):
-        #     if result:
-        #         element = self.questions[r]
-        #         self.scores[element] += 1
-
-        # self.erase_save()
+        self.score = sum(self.quiz_results)

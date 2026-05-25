@@ -14,6 +14,6 @@ import json
 
 class Parser(ToolBox):
 
-    def get_data(self) -> Dict:
+    def get_data(self) -> Dict[str, Dict[str, str | List[str]]]:
 
-        return self.read_txt(self.paths["file_data"])
+        return self.read_json(self.paths["file_data"])

@@ -27,13 +27,15 @@ class ToolBox(Settings):
         txt.close()
 
     def read_txt(self, path: str) -> str:
-        if path.endswith(".json"):
-            with open(path, "r", encoding="utf-8") as f:
-                return json.load(f)
         txt = open(path, "r", encoding="utf-8", errors="ignore")
         data = txt.read()
         txt.close()
         return data
+
+    def read_json(self, path: str) -> Dict:     # type:ignore
+        if path.endswith(".json"):
+            with open(path, "r", encoding="utf-8") as f:
+                return json.load(f)
 
     def export_txt(self, txt: str, title: str = "DebugExport") -> None:
         self.write_txt(f"{title}", txt)

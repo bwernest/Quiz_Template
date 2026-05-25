@@ -19,6 +19,9 @@ class Settings():
     paths: dict
     test: bool
 
+    quiz_length: int
+    quiz_theme: str
+
     def __init__(self, category: str = "prod") -> None:
         if Settings._config is None:
 

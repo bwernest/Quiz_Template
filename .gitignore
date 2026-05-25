@@ -6,3 +6,4 @@ pixi.lock
 .coverage
 profil.prof
 .vscode/settings.json
+engine/data/log.bw

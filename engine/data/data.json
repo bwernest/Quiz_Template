@@ -3,9 +3,9 @@
         "capsule_Q": "Quelle est la capitale de . ?",
         "capsule_Q_reverse": "De quel pays . est elle la capitale ?",
         "data": [
-            {"type": "Q", "question": "France", "reponse": "Paris"},
-            {"type": "Q", "question": "Espagne", "reponse": "Madrid"},
-            {"type": "Q", "question": "Italie", "reponse": "Rome"}
+            {"type": "Q", "question": "la France", "reponse": "Paris"},
+            {"type": "Q", "question": "l'Espagne", "reponse": "Madrid"},
+            {"type": "Q", "question": "l'Italie", "reponse": "Rome"}
         ]
     },
     "Solfège": {

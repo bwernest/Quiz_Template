@@ -1,7 +1,8 @@
+.pixi
 *.egg-info
+pixi.lock
 .gitattributes
 *.pyc
-*.coverage
-# pixi environments
-.pixi/*
-!.pixi/config.toml
+.coverage
+profil.prof
+.vscode/settings.json

@@ -1,34 +1,35 @@
-"""___Modules_______________________________________________________________"""
+"""___Modules___________________________________________________________________________________"""
 
-# bwizz
-from .errors import *
+# QuizTemplate
+from . import *
 from .settings import Settings
 
 # Python
-import datetime
 import os
-from typing import Dict, List
+import datetime
+import json
 
-"""___Functions_____________________________________________________________"""
+"""___Classes___________________________________________________________________________________"""
 
 
 class ToolBox(Settings):
 
-    def write_txt(self, path: str, text: str, append: bool = False, extension: str = "txt") -> None:
+    def write_txt(self, path: str, text: str, append: bool = False) -> None:
         if append:
             method = "a"
         else:
             method = "w"
-        if extension != "":
-            extension = "." + extension
         if "/" in path:
             SplitPath = path.split("/")
             os.makedirs("/".join(SplitPath[:-1]), exist_ok=True)
-        txt = open(f"{path}{extension}", method, encoding="utf-8")
+        txt = open(f"{path}", method, encoding="utf-8")
         txt.write(text)
         txt.close()
 
     def read_txt(self, path: str) -> str:
+        if path.endswith(".json"):
+            with open(path, "r", encoding="utf-8") as f:
+                return json.load(f)
         txt = open(path, "r", encoding="utf-8", errors="ignore")
         data = txt.read()
         txt.close()
@@ -37,7 +38,7 @@ class ToolBox(Settings):
     def export_txt(self, txt: str, title: str = "DebugExport") -> None:
         self.write_txt(f"{title}", txt)
 
-    def print_info(self, text: str, object: any, option: str = "") -> None:
+    def print_info(self, text: str, object: Any, option: str = "") -> None:
         """
         Print function. Option available : liste -> displays object line by line.
         """
@@ -57,7 +58,7 @@ class ToolBox(Settings):
         elif option == "token":
             self.print_info(text, f"{object.type} / {object.value}")
 
-    def add_log(self, text: str, objects: Dict[str, any] = {}, time: bool = True, disp: bool = True) -> None:
+    def add_log(self, text: str, objects: Dict[str, Any] = {}, time: bool = True, disp: bool = True) -> None:
         if objects == {}:
             log = f"{text}"
         else:
@@ -65,12 +66,15 @@ class ToolBox(Settings):
         if time:
             now = f"[{datetime.datetime.now().strftime("%d/%m/%Y-%H:%M")}]"
             log = f"{now} - {log}"
-        self.write_txt("log", log+"\n", append=True)
+        self.write_txt(self.paths["file_log"], log + "\n", append=True)
         if disp:
             print(log)
 
     def del_log(self):
-        self.write_txt("log", "")
+        try:
+            os.remove(self.paths["file_log"])
+        except FileNotFoundError:
+            pass
 
     def get_local_files(self, path: str) -> List[str]:
         return os.listdir(path)
@@ -82,11 +86,11 @@ class ToolBox(Settings):
         files = []
         lenF = len(format)
         for file in os.listdir(path):
-            if os.path.isfile(path+"/"+file):
+            if os.path.isfile(path + "/" + file):
                 if len(file) > lenF and file[-lenF:] == format:
-                    files.append(path+"/"+file)
+                    files.append(path + "/" + file)
             else:
-                files += self.search_format(format, path+"/"+file)
+                files += self.search_format(format, path + "/" + file)
         return files
 
     def clean_folder(self, path: str, subcall: bool = False) -> None:

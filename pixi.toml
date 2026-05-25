@@ -1,35 +1,42 @@
 [workspace]
-authors = ["bwernest <ernest.laprelleboucher@gmail.com>"]
+authors = ["elaprelleboucher"]
 channels = ["conda-forge"]
-name = "Quiz_Template"
+name = "QuizTemplate"
 platforms = ["win-64"]
 version = "0.1.0"
 
 [dependencies]
 
 # Python
-python = "3.13.*"
+python = "*"
 numpy = "*"
-openpyxl = "*"
-pandas = "*"
+lark = "*"
 
 # Développement
 autopep8 = "*"
 coverage = "*"
+nicegui = "*"
 pytest = "*"
+snakeviz = "*"
+tqdm = "*"
 
 [tasks]
 
 # Mono
 main = "python main.py"
 config = "python config.py"
-cover_get = "coverage run -m pytest engine"
-cover_show = "coverage html"
 format = "autopep8 --in-place --recursive ./"
 go = "python main_dev.py"
-test = "pytest engine"
+test = "pytest engine/test"
+testx = "pytest -s -x engine"
 print_test = "pytest -s engine"
 
 # Multi
-coverage = {depends-on = ["cover_get", "cover_show"]}
+coverage = {depends-on = ["_cover_get", "_cover_show"]}
+perf = {depends-on = ["_perf_get", "_perf_show"]}
 validate = {depends-on = ["format", "test", "main"]}
+
+_cover_get = "coverage run --source=engine -m pytest"
+_cover_show = "coverage html"
+_perf_get = "python -m cProfile -o profil.prof main_perf.py"
+_perf_show = "snakeviz profil.prof"

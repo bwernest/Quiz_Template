@@ -1,17 +1,9 @@
-"""___Classes_______________________________________________________________"""
+"""___Classes___________________________________________________________________________________"""
 
 
-class QuizException(Exception):
+class QuizTemplateException(Exception):
     pass
 
 
-class SettingsNotAvailable(QuizException):
-    pass
-
-
-class QuizDataUnreadable(QuizException):
-    pass
-
-
-class QuizSaveUnreadable(QuizException):
+class SettingsNotAvailable(QuizTemplateException):
     pass

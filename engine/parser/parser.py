@@ -14,7 +14,6 @@ import json
 
 class Parser(ToolBox):
 
-    def get_data(self) -> None:
+    def get_data(self) -> Dict:
 
-        raw_data = self.read_txt(self.paths["file_data"])
-        print(raw_data)
+        return self.read_txt(self.paths["file_data"])

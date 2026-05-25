@@ -5,9 +5,10 @@ blablabla
 """___Modules_______________________________________________________________"""
 
 # QuizTemplate
+from engine.api.main import QuizTemplate
 from engine.engine.engine import Engine
 
 """___Execution_____________________________________________________________"""
 
-engine = Engine("prod")
-engine.start()
+qt = QuizTemplate("prod")
+qt.start()

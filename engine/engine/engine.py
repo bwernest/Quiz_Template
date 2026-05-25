@@ -50,6 +50,10 @@ class Engine(Parser):
             question = capsules[step["type"]].replace(".", step["question"])
             self.steps.append({"question": question, "reponse": step["reponse"]})
 
+    def go_next_question(self) -> None:
+        self.active_question_index += 1
+        self.active_correction = ""
+
     def get_capsules(self) -> Dict[Literal["Q", "I"], str]:
         capsules = {}
         for qtype in ["I", "Q"]:

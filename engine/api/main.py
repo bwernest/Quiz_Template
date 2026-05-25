@@ -2,7 +2,7 @@
 
 # QuizTemplate
 from ..engine.engine import Engine
-from .pages import home, play
+from .pages import home, play, results
 
 # Python
 from nicegui import app, ui
@@ -30,6 +30,11 @@ class QuizTemplate():
             self.engine.add_log("Création de la page play")
             play.create(self.engine)
 
+        @ui.page("/results")
+        def page_results():
+            self.engine.add_log("Création de la page results")
+            results.create(self.engine)
+
     def start(self) -> None:
         self.engine.add_log("Démarrage de l'interface")
-        ui.run(title="Quiz Template")
+        ui.run(title="Quiz Template", reload=False, native=True)
